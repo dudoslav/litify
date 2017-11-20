@@ -9,7 +9,15 @@
 
 ## How to install?
 
-I dont know.
+Depends on your distro.
+
+### Archlinux
+
+`yaourt -S litify-git`
+
+### Other distros
+
+[Detailed guide](https://wiki.archlinux.org/index.php/Installation_guide)
 
 ## How to use?
 
@@ -20,3 +28,4 @@ $ litify 'dudoslav@zebra:/home/dudoslav ->'
 ```
 
 and also it can be used in PS1... somehow.
+Btw, I use Arch.
