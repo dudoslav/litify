@@ -2,10 +2,11 @@
 
 source lib
 
-DEFAULT_CONFIG=/etc/lit
+# DEFAULT_CONFIG=/etc/lit
+DEFAULT_CONFIG=default
 USER_CONFIG=~/.lit
 
-eloademojis default
+[ -f $DEFAULT_CONFIG ] && eloademojis $DEFAULT_CONFIG
 [ -f $USER_CONFIG ] && eloademojis $USER_CONFIG
 
 while [[ $# -gt 0 ]]; do
@@ -18,6 +19,11 @@ while [[ $# -gt 0 ]]; do
 	    eemojis
 	    exit
 	    ;;
+	-f|--file)
+	    [ -f $2 ] && eloademojis $2
+	    shift
+	    shift
+	    ;;
 	*)
 	    POSITIONAL+=("$1")
 	    shift
@@ -26,4 +32,6 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${POSITIONAL[@]}"
 
-echo $@ | sed "`escript`"
+while read line; do
+    echo "$line" | sed "`escript`"
+done
