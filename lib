@@ -1,0 +1,37 @@
+#!/bin/bash
+
+declare -A emojis
+
+function eloademojis() {
+    while read -r -a line; do
+	emojis[$line]="${line[@]:2}"
+    done < "$1"
+}
+
+function ehelp() {
+    echo -e '\t👌LITIFY👌 👉 substring replacer'
+    echo -e '\t-h to print this help'
+    echo -e '\t-e to print emojis and substitutions'
+}
+
+function eemojis() {
+    echo '-------------------------'
+    for emoji in "${!emojis[@]}"; do
+	echo -ne "$emoji:\t"
+	for name in ${emojis[$emoji]}; do
+	    echo -n "$name "
+	done
+	echo -ne "\n"
+    done
+    echo '-------------------------'
+}
+
+function escript() {
+    local script=''
+    for emoji in "${!emojis[@]}"; do
+	for name in "${emojis[$emoji]}"; do
+	    script+="s/${name}/${emoji}/g; "
+	done
+    done
+    echo "$script"
+}

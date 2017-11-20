@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source lib
+
+DEFAULT_CONFIG=/etc/lit
+USER_CONFIG=~/.lit
+
+eloademojis default
+[ -f $USER_CONFIG ] && eloademojis $USER_CONFIG
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+	-h|--help)
+	    ehelp
+	    exit
+	    ;;
+	-e|--emojis)
+	    eemojis
+	    exit
+	    ;;
+	*)
+	    POSITIONAL+=("$1")
+	    shift
+	    ;;
+    esac
+done
+set -- "${POSITIONAL[@]}"
+
+echo $@ | sed "`escript`"
