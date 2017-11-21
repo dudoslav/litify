@@ -23,8 +23,8 @@ Depends on your distro.
 
 For example:
 ```
-$ litify 'dudoslav@zebra:/home/dudoslav ->'
-- 😂@🦓:/🏠/😂 👉
+$ echo 'dudoslav@zebra:/home/dudoslav ->' | litify
+😂@🦓:/🏠/😂 👉
 ```
 
 and also it can be used in PS1... somehow.
