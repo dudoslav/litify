@@ -4,8 +4,18 @@ declare -A emojis
 
 function eloademojis() {
     while read -r -a line; do
-	emojis[$line]="${line[@]:2}"
+	emojis["${line[@]:1}"]="${line}"
     done < "$1"
+}
+
+function escript() {
+    local script=''
+    while read -r -a line; do
+	script+="s/${line[@]:1}/${line}/g;"
+    done < <(for name in "${!emojis[@]}"; do
+	echo ${emojis["$name"]} \"$name\"
+    done | awk '{ print length - length($1), $0 }' | sort -rn -s | sed -E 's/[^ ]* //' | sed 's/"//g')
+    echo $script
 }
 
 function ehelp() {
@@ -16,25 +26,10 @@ function ehelp() {
 
 function eemojis() {
     echo '-------------------------'
-    for emoji in "${!emojis[@]}"; do
-	echo -ne "$emoji:\t"
-	for name in ${emojis[$emoji]}; do
-	    echo -n "$name "
-	done
-	echo -ne "\n"
-    done
+    echo "`escript`"
     echo '-------------------------'
 }
 
-function escript() {
-    local script=''
-    for emoji in "${!emojis[@]}"; do
-	for name in "${emojis[$emoji]}"; do
-	    script+="s/${name}/${emoji}/g; "
-	done
-    done
-    echo "$script"
-}
 
 DEFAULT_CONFIG=/etc/lit
 USER_CONFIG=~/.lit
@@ -55,13 +50,15 @@ while [[ $# -gt 0 ]]; do
 	-f|--file)
 	    [ -f $2 ] && eloademojis $2
 	    shift
-	    shift
+	    ;;
+	-s|--spaces)
+	    # TODO: implement
 	    ;;
 	*)
 	    POSITIONAL+=("$1")
-	    shift
 	    ;;
     esac
+    shift
 done
 set -- "${POSITIONAL[@]}"
 
