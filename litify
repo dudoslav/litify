@@ -11,7 +11,7 @@ function eloademojis() {
 function escript() {
     local script=''
     while read -r -a line; do
-	script+="s/${line[@]:1}/${line}/g;"
+	script+="s/${line[@]:1}/${line}/gI;"
     done < <(for name in "${!emojis[@]}"; do
 	echo ${emojis["$name"]} \"$name\"
     done | awk '{ print length - length($1), $0 }' | sort -rn -s | sed -E 's/[^ ]* //' | sed 's/"//g')
